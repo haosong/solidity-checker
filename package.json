@@ -1,0 +1,22 @@
+{
+  "name": "solidity-checker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/song-hao/solidity-checker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/song-hao/solidity-checker/issues"
+  },
+  "homepage": "https://github.com/song-hao/solidity-checker#readme",
+  "dependencies": {
+    "solidity-parser": "^0.4.0"
+  }
+}
