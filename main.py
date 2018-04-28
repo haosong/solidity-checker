@@ -1,10 +1,12 @@
 from subprocess import call
 import sys
 import json
+import pprint
 
+pp = pprint.PrettyPrinter(indent=4)
 
 def check(file):
-    print(file)
+    pp.pprint(file)
     pass
 
 

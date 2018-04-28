@@ -2,5 +2,4 @@
 
 rm -rf ./tmp
 mkdir ./tmp
-solidity-parser $1 > ./tmp/result.json
-
+./node_modules/solidity-parser/cli.js $1 > ./tmp/result.json
