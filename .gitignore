@@ -417,3 +417,6 @@ venv.bak/
 
 
 # End of https://www.gitignore.io/api/node,python,pycharm,intellij,pycharm+all,pycharm+iml,intellij+all,intellij+iml
+
+
+tmp/
