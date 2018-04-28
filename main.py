@@ -3,7 +3,7 @@ import sys
 import json
 import pprint
 
-pp = pprint.PrettyPrinter(indent=4)
+pp = pprint.PrettyPrinter(indent=1)
 
 def check(file):
     pp.pprint(file)
