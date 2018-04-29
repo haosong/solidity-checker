@@ -18,6 +18,9 @@ contract SimpleDAO {
 
         uint d = b - a;
         assert(a <= b);
+
+        assert(0 == a || e / a == b);
+        uint e = a * b;
     }
 
     function donateToSimpleDAO(uint amount) public {
