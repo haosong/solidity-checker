@@ -1,10 +1,10 @@
-from warningLog import Warning
+from utils.warningLog import Warning
 
 warning = []
 
 
 # node: file node
-def check(node):
+def checkReentry(node):
     # pp.pprint(file)
     for contract in node["body"]:
         find(node)

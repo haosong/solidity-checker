@@ -1,6 +1,13 @@
-from warningLog import Warning
+from utils.warningLog import Warning
 
-def case9(ast): # detectNoReturnStatement
+def checkFunctionLevel(file):
+    warnings = []
+    warnings += detectNowUsage(file)
+    warnings += detectNoReturnStatement(file)
+    warnings += detectFallbackFunction(file)
+    return warnings
+
+def detectNoReturnStatement(ast): # detectNoReturnStatement
   errorRanges = []
   functionNodes = []
   findType(ast, 'FunctionDeclaration', functionNodes)
@@ -13,7 +20,7 @@ def case9(ast): # detectNoReturnStatement
         errorRanges.append(Warning(funcNode['start'], funcNode['end'], 'No Return Statement'))
   return errorRanges
 
-def case8(ast): # detectNowUsage
+def detectNowUsage(ast): # detectNowUsage
   errorRanges = []
   nowNodes = []
   findTypeAndName(ast, 'Identifier', 'now', nowNodes)
@@ -21,7 +28,7 @@ def case8(ast): # detectNowUsage
     errorRanges.append(Warning(nowNode['start'], nowNode['end'], 'Do not use now for randomness'))
   return errorRanges
 
-def case10(ast): # detect fallback function
+def detectFallbackFunction(ast): # detect fallback function
   noNameFuncNodes = []
   findFallbackFunctions(ast, noNameFuncNodes)
   errorRanges = []

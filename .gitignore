@@ -421,3 +421,5 @@ venv.bak/
 
 tmp/
 data/
+test.sol
+output.txt

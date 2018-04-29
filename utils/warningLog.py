@@ -49,12 +49,12 @@ class WarningLogger:
           startLine = lineNum
         if lineRange[0] < end and end <= lineRange[1]:
           endLine = lineNum
-      print '================================ warning ================================\n'
+      print('================================ warning ================================\n')
       if startLine == endLine: # inline error
         offset = start - self.lineRanges[startLine][0]
-        print self.lines[startLine].strip('\n')
-        print ' ' * offset + '^--', message, '\n'
+        print(self.lines[startLine].strip('\n'))
+        print(' ' * offset + '^--' + ' ' + message + ' ' + '\n')
       else:
         for line in self.lines[startLine:endLine + 1]:
-          print line.strip('\n')
-        print '-->', message, '\n'
+          print(line.strip('\n'))
+        print('-->' + ' ' + message + ' ' + '\n')
