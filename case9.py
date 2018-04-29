@@ -1,3 +1,5 @@
+from warningLog import Warning
+
 def case9(ast): # detectNoReturnStatement
   errorRanges = []
   functionNodes = []
@@ -8,7 +10,7 @@ def case9(ast): # detectNoReturnStatement
       funcWithReturnStm = []
       findType(funcNode, 'ReturnStatement', funcWithReturnStm)
       if len(funcWithReturnStm) == 0:
-        errorRanges.append((funcNode['start'], funcNode['end'], 'No Return Statement'))
+        errorRanges.append(Warning(funcNode['start'], funcNode['end'], 'No Return Statement'))
   return errorRanges
 
 def case8(ast): # detectNowUsage
@@ -16,7 +18,7 @@ def case8(ast): # detectNowUsage
   nowNodes = []
   findTypeAndName(ast, 'Identifier', 'now', nowNodes)
   for nowNode in nowNodes:
-    errorRanges.append((nowNode['start'], nowNode['end'], 'Do not use now for randomness'))
+    errorRanges.append(Warning(nowNode['start'], nowNode['end'], 'Do not use now for randomness'))
   return errorRanges
 
 def case10(ast): # detect fallback function
@@ -24,10 +26,10 @@ def case10(ast): # detect fallback function
   findFallbackFunctions(ast, noNameFuncNodes)
   errorRanges = []
   if len(noNameFuncNodes) == 0:
-    errorRanges.append((ast['start'], ast['end'], 'Contract has no fallback function'))
+    errorRanges.append(Warning(ast['start'], ast['end'], 'Contract has no fallback function'))
   elif len(noNameFuncNodes) > 1:
     for idx, node in enumerate(noNameFuncNodes, 1):
-      errorRanges.append((node['start'], node['end'], 'More than one fallback function'))
+      errorRanges.append(Warning(node['start'], node['end'], 'More than one fallback function'))
   else:
     errorRanges += inspectFallbackFunction(noNameFuncNodes[0])
   return errorRanges
@@ -37,11 +39,11 @@ def inspectFallbackFunction(node):
   funcWithReturnStm = []
   findType(node, 'ReturnStatement', funcWithReturnStm)
   if len(funcWithReturnStm) > 0:
-    errorRanges.append((node['start'], node['end'], 'Fallback function should not have a return statement.'))
+    errorRanges.append(Warning(node['start'], node['end'], 'Fallback function should not have a return statement.'))
   payableModifier = []
   findTypeAndName(node, 'ModifierArgument', 'payable', payableModifier)
   if len(payableModifier) == 0:
-    errorRanges.append((node['start'], node['end'], 'Fallback function should have "payable" modifier.'))
+    errorRanges.append(Warning(node['start'], node['end'], 'Fallback function should have "payable" modifier.'))
   return errorRanges
 
 def findFallbackFunctions(node, ret):

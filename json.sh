@@ -1,5 +1,5 @@
 #!/bin/bash
 
-rm -rf ./tmp
-mkdir ./tmp
-./node_modules/solidity-parser/cli.js $1 > ./tmp/result.json
+rm -rf ./data
+mkdir ./data
+./node_modules/solidity-parser/cli.js $1 > ./data/ast.json
