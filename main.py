@@ -2,7 +2,7 @@ from subprocess import call
 import sys
 import json
 import pprint
-from warningLog import Warning, WarningLogger
+from utils.warningLog import Warning, WarningLogger
 from checkers.reentry import checkReentry
 from checkers.funcLevel import checkFunctionLevel
 
