@@ -3,8 +3,9 @@ import sys
 import json
 import pprint
 from utils.warningLog import Warning, WarningLogger
-from checkers.reentry import checkReentry
-from checkers.funcLevel import checkFunctionLevel
+from checkers.reentry import check_reentry
+from checkers.funcLevel import check_functionLevel
+from checkers.overflow import check_num_overflow
 
 
 
@@ -15,8 +16,9 @@ if __name__ == '__main__':
         call(["./bin/json.sh", fileName])
         with open('./data/ast.json') as f:
             json_data = json.load(f)
-            warning = checkReentry(json_data)
-            warning += checkFunctionLevel(json_data)
+            warning = check_reentry(json_data)
+            warning += check_functionLevel(json_data)
             for w in warning:
                 logger.log(w)            
+            check_num_overflow(json_data)
 

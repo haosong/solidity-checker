@@ -4,7 +4,7 @@ warning = []
 
 
 # node: file node
-def checkReentry(node):
+def check_reentry(node):
     # pp.pprint(file)
     for contract in node["body"]:
         find(node)
