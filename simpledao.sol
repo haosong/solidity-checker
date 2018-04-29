@@ -8,7 +8,18 @@ contract SimpleDAO {
     function queryCredit(address to) public returns (uint) {
         // return credit[to];
     }
-    
+
+    function overflow() public {
+        uint a = 1;
+        uint b = 1;
+
+        assert(c >= a);
+        uint c = a + b;
+
+        uint d = b - a;
+        assert(a <= b);
+    }
+
     function donateToSimpleDAO(uint amount) public {
         address(dao).call.value(amount)(bytes4(sha3("donate(uint256)")),amount);
     }
