@@ -60,9 +60,11 @@ def find_if_var(node, if_var):
         if node["test"]["type"] == "BinaryExpression":
             for side in ["left", "right"]:
                 if node["test"][side]["type"] == "Identifier":
-                    if_var.append(node["test"][side]["name"])
+                    if node["test"][side]["name"] not in if_var:
+                        if_var[node["test"][side]["name"]] = node["start"]
                 elif node["test"][side]["type"] == "MemberExpression":
-                    if_var.append(node["test"][side]["object"]["name"])
+                    if node["test"][side]["object"]["name"] not in if_var:
+                        if_var[node["test"][side]["object"]["name"]] = node["start"]
         elif node["test"]["type"] == "UnaryExpression":
             pass
         for statement in node["consequent"]["body"]:
@@ -80,8 +82,8 @@ def find_call(node, state_var, if_var, flag):
                 if "expression" in node and node["expression"]["type"] == "AssignmentExpression":
                     name = node["expression"]["left"]["object"]["name"]
                     if name in state_var and name in if_var:
-                        warning.append(Warning(node["start"], node["end"], "reentry"))
-                        print("Find re-entry at [", node["start"], node["end"], "]")
+                        warning.append(Warning(if_var[name], node["end"], "reentry"))
+                        print("Find re-entry at [", if_var[name], node["end"], "]")
         # Iterate through current node's children
         for _, value in node.items():
             if isinstance(value, list):
@@ -97,7 +99,7 @@ def find_call(node, state_var, if_var, flag):
 # node: function node
 def check_func_reentry(node, state_var):
     # array of all statements in the function
-    if_var = []
+    if_var = {}
     for obj in node["body"]["body"]:
         # find all if-statement: return set of vars
         find_if_var(obj, if_var)
