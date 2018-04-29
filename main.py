@@ -37,7 +37,7 @@ def check(node):
         find(node)
         check_low_level_func_return(contract)
         state_var = find_state_var(contract)
-        print(state_var)
+        # print(state_var)
         for statement in contract["body"]:
             if statement["type"] == "FunctionDeclaration":
                 check_func_reentry(statement, state_var)
@@ -74,11 +74,14 @@ def find_if_var(node, if_var):
 def find_call(node, state_var, if_var, flag):
     try:
         if "start" in node:
-            if "type" in node and node["type"] == "CallExpression":
-                flag = [True]
-        if flag[0]:
-            if "type" in node and node["type"] == "AssignmentExpression":
-                pass
+            if not flag[0] and "type" in node and node["type"] == "CallExpression":
+                flag[0] = True
+            if flag[0]:
+                if "expression" in node and node["expression"]["type"] == "AssignmentExpression":
+                    name = node["expression"]["left"]["object"]["name"]
+                    if name in state_var and name in if_var:
+                        warning.append(Warning(node["start"], node["end"], "reentry"))
+                        print("Find re-entry at [", node["start"], node["end"], "]")
         # Iterate through current node's children
         for _, value in node.items():
             if isinstance(value, list):
@@ -100,28 +103,27 @@ def check_func_reentry(node, state_var):
         find_if_var(obj, if_var)
         if len(if_var) == 0:
             return
-        print("if_var: ", if_var)
+        # print("if_var: ", if_var)
         # find first call statement
-        flag = [False]
-        find_call(obj, state_var, if_var, flag)
-        # check statement after that, change set of vars or not
-        pass
-    pass
+    flag = [False]
+    find_call(node, state_var, if_var, flag)
+    # check statement after that, change set of vars or not
 
 
-def check_low_level_func_return(file):
-    if isinstance(file, list):
-        for f in file:
+def check_low_level_func_return(node):
+    if isinstance(node, list):
+        for f in node:
             check_low_level_func_return(f)
         return
-    elif isinstance(file, dict):
-        if file["type"] == "IfStatement":
+    elif isinstance(node, dict):
+        if node["type"] == "IfStatement":
             return
-        if file["type"] == "Identifier" and "name" in file and file["name"] == "call":
-            print("start", ":", file["start"], " no check!")
+        if node["type"] == "Identifier" and "name" in node and node["name"] == "call":
+            warning.append(Warning(node["start"], node["end"], "check_call_return"))
+            print("Find not check call() return value at [", node["start"], node["end"], "]")
         else:
-            for f in file:
-                check_low_level_func_return(file[f])
+            for f in node:
+                check_low_level_func_return(node[f])
 
 
 # Check static error
