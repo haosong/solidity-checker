@@ -17,5 +17,6 @@ if __name__ == '__main__':
             warning = check_reentry(json_data)
             warning += check_functionLevel(json_data)
             warning += check_num_overflow(json_data)
+            print(len(warning), "warnings found!")
             for w in warning:
                 logger.log(w)

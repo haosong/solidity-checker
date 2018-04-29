@@ -55,8 +55,10 @@ def find_call(node, state_var, if_var, flag):
                 if "expression" in node and node["expression"]["type"] == "AssignmentExpression":
                     name = node["expression"]["left"]["object"]["name"]
                     if name in state_var and name in if_var:
-                        warning.append(Warning(if_var[name], node["end"], "reentry"))
-                        print("Find re-entry at [", if_var[name], node["end"], "]")
+                        warning.append(Warning(if_var[name], node["end"],
+                                               "Could potentially lead to re-entrancy vulnerability\n"
+                                               "http://solidity.readthedocs.io/en/develop/security-considerations.html#re-entrancy"))
+                        # print("Find re-entry at [", if_var[name], node["end"], "]")
         # Iterate through current node's children
         for _, value in node.items():
             if isinstance(value, list):
@@ -94,8 +96,9 @@ def check_low_level_func_return(node):
         if node["type"] == "IfStatement":
             return
         if node["type"] == "Identifier" and "name" in node and node["name"] == "call":
-            warning.append(Warning(node["start"], node["end"], "check_call_return"))
-            print("Find not check call() return value at [", node["start"], node["end"], "]")
+            warning.append(Warning(node["start"], node["end"], "Low-level call() result unchecked\n"
+                                                               "https://github.com/ConsenSys/smart-contract-best-practices#external-calls"))
+            # print("Find not check call() return value at [", node["start"], node["end"], "]")
         else:
             for f in node:
                 check_low_level_func_return(node[f])
@@ -110,17 +113,21 @@ def find(node):
             if "name" in node:
                 name = node["name"]
                 if name == "sha3":
-                    warning.append(Warning(start, end, name))
-                    print("Find sha3() at [", start, end, "], please change to keccak256()")
+                    warning.append(Warning(start, end, "Use keccak256() instead of sha3()\n"
+                                                       "https://github.com/ethereum/EIPs/issues/59"))
+                    # print("Find sha3() at [", start, end, "], please change to keccak256()")
                 elif name == "send":
-                    warning.append(Warning(start, end, name))
-                    print("Find send() at [", start, end, "], please change to transfer()")
+                    warning.append(Warning(start, end, "Use transfer() instead of send()\n"
+                                                       "http://solidity.readthedocs.io/en/develop/types.html#members-of-addresses"))
+                    # print("Find send() at [", start, end, "], please change to transfer()")
                 elif name == "suicide":
-                    warning.append(Warning(start, end, name))
-                    print("Find suicide() at [", start, end, "], please change to selfdestruct()")
+                    warning.append(Warning(start, end, "Use selfdestruct() instead of suicide()\n"
+                                                       "https://github.com/ethereum/EIPs/blob/master/EIPS/eip-6.md"))
+                    # print("Find suicide() at [", start, end, "], please change to selfdestruct()")
             if "type" in node and node["type"] == "ThrowStatement":
-                warning.append(Warning(start, end, "throw"))
-                print("Find throw at [", start, end, "], please change to revert()")
+                warning.append(Warning(start, end, "Use revert() instead of throw\n"
+                                                   "https://solidity.readthedocs.io/en/develop/control-structures.html#error-handling-assert-require-revert-and-exceptions"))
+                # print("Find throw at [", start, end, "], please change to revert()")
         # Iterate through current node's children
         for _, value in node.items():
             if isinstance(value, list):

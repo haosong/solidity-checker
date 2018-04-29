@@ -34,9 +34,10 @@ def check_overflow(node, add_check, assertions):
                     # print("assertions: ", assertions)
                     if arg not in assertions:
                         warning.append(
-                            Warning(expression["start"], expression["end"], "The subtraction operation might overflow"))
-                        print("Find possible subtraction operation overflow at [", expression["start"],
-                              expression["end"], "]")
+                            Warning(expression["start"], expression["end"], "The subtraction operation might overflow\n"
+                                                                            "https://ethereumdev.io/safemath-protect-overflows/"))
+                        # print("Find possible subtraction operation overflow at [", expression["start"],
+                        #       expression["end"], "]")
 
         elif "callee" in node:
             expression = node["callee"]
