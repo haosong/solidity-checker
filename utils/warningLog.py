@@ -22,7 +22,6 @@ class Warning:
 
 class WarningLogger:
     def __init__(self, filename):
-        filename = 'simpledao.sol'
         f = open(filename, 'r')
         self.lineRanges = []
         self.lines = f.readlines()
