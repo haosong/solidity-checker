@@ -4,13 +4,6 @@ class Warning:
         self.end = end
         self.name = name
 
-    def warning_msg(self):
-        pass
-
-    def get_line(self):
-        # return line number with given start and end
-        pass
-
     def __repr__(self):
         return '%r %r %r' % (self.start, self.end, self.name)
 
@@ -32,15 +25,6 @@ class WarningLogger:
             charIdx = lineEnd
     
     def log(self, warning):
-      # filename = 'simpledao.sol'
-      # f = open(filename, 'r')
-      # lineRanges = []
-      # lines = f.readlines()
-      # idx = 0
-      # for lineNum, line in enumerate(lines):
-      #   lineEnd = idx + len(line)
-      #   lineRanges.append((idx, lineEnd))
-      #   idx = lineEnd
       start, end, message = warning.start, warning.end, warning.name
       startLine = endLine = 0
       for lineNum, lineRange in enumerate(self.lineRanges):
@@ -49,7 +33,7 @@ class WarningLogger:
         if lineRange[0] < end and end <= lineRange[1]:
           endLine = lineNum
       print('================================ warning ================================\n')
-      if startLine == endLine: # inline error
+      if startLine == endLine:
         offset = start - self.lineRanges[startLine][0]
         print(self.lines[startLine].strip('\n'))
         print(' ' * offset + '^--' + ' ' + message + ' ' + '\n')

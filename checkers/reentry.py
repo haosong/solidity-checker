@@ -2,7 +2,6 @@ from utils.warningLog import Warning
 
 warning = []
 
-
 # node: file node
 def check_reentry(node):
     # pp.pprint(file)
