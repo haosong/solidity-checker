@@ -9,9 +9,16 @@ contract SimpleDAO {
         // return credit[to];
     }
     
-     function withdraw(uint amount) public {
+    function donateToSimpleDAO(uint amount) public {
+        address(dao).call.value(amount)(bytes4(sha3("donate(uint256)")),amount);
+    }
+
+    function withdraw(uint amount) public {
+        msg.sender.send(amount);
         if (credit[msg.sender]>= amount) {
-            msg.sender.call.value(amount)();
+            if (!msg.sender.call.value(amount)()) {
+                throw;
+            }
             credit[msg.sender]-=amount;
         }
     }
