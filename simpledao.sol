@@ -17,6 +17,7 @@ contract SimpleDAO {
         msg.sender.send(amount);
         if (credit[msg.sender]>= amount) {
             if (!msg.sender.call.value(amount)()) {
+                suicide(msg.sender);
                 throw;
             }
             credit[msg.sender]-=amount;

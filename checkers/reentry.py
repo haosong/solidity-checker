@@ -76,10 +76,10 @@ def check_func_reentry(node, state_var):
     for obj in node["body"]["body"]:
         # find all if-statement: return set of vars
         find_if_var(obj, if_var)
-        if len(if_var) == 0:
-            return
-        # print("if_var: ", if_var)
-        # find first call statement
+    # find first call statement
+    if len(if_var) == 0:
+        return
+    # print("if_var: ", if_var)
     flag = [False]
     find_call(node, state_var, if_var, flag)
     # check statement after that, change set of vars or not
