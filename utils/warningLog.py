@@ -35,7 +35,7 @@ class WarningLogger:
       print('================================ warning ================================\n')
       if startLine == endLine:
         offset = start - self.lineRanges[startLine][0]
-        print(self.lines[startLine].strip('\n'))
+        print(self.lines[startLine].strip('\r\n').strip('\n'))
         print(' ' * offset + '^--' + ' ' + message + ' ' + '\n')
       else:
         for line in self.lines[startLine:endLine + 1]:
