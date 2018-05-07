@@ -9,6 +9,7 @@ def check_reentry(node):
         find(node)
         check_low_level_func_return(contract)
         state_var = find_state_var(contract)
+        print(state_var)
         # print(state_var)
         for statement in contract["body"]:
             if statement["type"] == "FunctionDeclaration":
@@ -39,8 +40,9 @@ def find_if_var(node, if_var):
                         if_var[node["test"][side]["object"]["name"]] = node["start"]
         elif node["test"]["type"] == "UnaryExpression":
             pass
-        for statement in node["consequent"]["body"]:
-            find_if_var(statement, if_var)
+        if "body" in node["consequent"]:
+            for statement in node["consequent"]["body"]:
+                find_if_var(statement, if_var)
     else:
         pass
 
@@ -52,7 +54,11 @@ def find_call(node, state_var, if_var, flag):
                 flag[0] = True
             if flag[0]:
                 if "expression" in node and node["expression"]["type"] == "AssignmentExpression":
-                    name = node["expression"]["left"]["object"]["name"]
+                    if "object" in node["expression"]["left"]:
+                        name = node["expression"]["left"]["object"]["name"]
+                    else:
+                        name = node["expression"]["left"]["name"]
+                    print("assignment expression: " + name)
                     if name in state_var and name in if_var:
                         warning.append(Warning(if_var[name], node["end"],
                                                "Could potentially lead to re-entrancy vulnerability\n"
@@ -80,7 +86,7 @@ def check_func_reentry(node, state_var):
     # find first call statement
     if len(if_var) == 0:
         return
-    # print("if_var: ", if_var)
+    print("if_var: ", if_var)
     flag = [False]
     find_call(node, state_var, if_var, flag)
     # check statement after that, change set of vars or not
