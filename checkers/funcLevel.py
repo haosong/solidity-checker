@@ -1,7 +1,7 @@
 from utils.warningLog import Warning
 
 
-def check_functionLevel(file):
+def check_function_level(file):
     warnings = []
     warnings += detectNowUsage(file)
     warnings += detectNoReturnStatement(file)

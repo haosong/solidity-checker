@@ -4,7 +4,7 @@ import json
 import pprint
 from utils.warningLog import Warning, WarningLogger
 from checkers.reentry import check_reentry
-from checkers.funcLevel import check_functionLevel
+from checkers.funcLevel import check_function_level
 from checkers.overflow import check_num_overflow
 
 if __name__ == '__main__':
@@ -15,7 +15,7 @@ if __name__ == '__main__':
         with open('./data/ast.json') as f:
             json_data = json.load(f)
             warning = check_reentry(json_data)
-            warning += check_functionLevel(json_data)
+            warning += check_function_level(json_data)
             warning += check_num_overflow(json_data)
             print(len(warning), "warnings found!")
             for w in warning:
