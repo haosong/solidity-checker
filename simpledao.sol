@@ -10,6 +10,28 @@ contract SimpleDAO {
     }
 
     function overflow() public {
+
+        uint a = 0, b = 2;
+
+        //assert(a >= b);
+        int d = a - b;
+
+
+        uint c = a + b;
+        //assert(c > a);
+
+        a = c * b;
+        //assert(b == 0 || c == a / b );
+
+        c = 1 + 2;
+        //assert(c > 1);
+
+        //assert(5 > 2);
+        b = 5 - 2;
+
+        a = 4 * 3;
+        //assert(4 == 0 || 3 == a / 4);
+
         uint a = 1;
         uint b = 1;
 
